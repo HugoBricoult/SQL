@@ -1,0 +1,1 @@
+INSERT INTO Météo (ville,haut,bas) VALUES ('CourSurHeure',10,5);
