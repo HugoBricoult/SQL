@@ -1,4 +1,11 @@
 <?php
+session_start();
+if(isset($_SESSION['login'])){
+  echo 'vous êtes connecté<br>';
+  echo '<form action="login.php" method="post"><button name="disconnect">Se déconecter</button></form>';
+}else{
+  header("Location:login.php");
+}
 try
 {
 	$bdd = new PDO('mysql:host=localhost;dbname=becode;charset=utf8', 'root', '');

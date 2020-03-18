@@ -1,4 +1,11 @@
 <?php
+session_start();
+if(isset($_SESSION['login'])){
+  echo 'vous êtes connecté<br>';
+  echo '<form action="login.php" method="post"><button name="disconnect">Se déconecter</button></form>';
+}else{
+  header("Location:login.php");
+}
 try
 {
 	$bdd = new PDO('mysql:host=localhost;dbname=becode;charset=utf8', 'root', '');
@@ -11,6 +18,14 @@ if(isset($_POST['button'])){
     $req = "INSERT INTO `hiking` (`id`, `name`, `difficulty`, `distance`, `duration`, `height_difference`) VALUES (NULL, '".$_POST['name']."', '".$_POST['difficulty']."', '".$_POST['distance']."', '".$_POST['duration']."', '".$_POST['height_difference']."')";
     $stmt = $bdd->exec($req);
     if($stmt == 1)echo "Envoyer Avec succès <br>";
+}
+if(isset($_POST['update'])){
+    $req = "UPDATE hiking SET name = '".$_POST['name']."' WHERE id = '".$_POST['update']."'";
+    $bdd->exec($req);
+}
+if(isset($_POST['data'])){
+    $req = "DELETE FROM hiking WHERE id = '".$_POST['data']."'";
+    $bdd->exec($req);
 }
 ?>
 <!DOCTYPE html>
@@ -37,6 +52,8 @@ while ($donnees = $resultat->fetch())
     echo '<td>'.$donnees['distance'].'</td>';
     echo '<td>'.$donnees['duration'].'</td>';
     echo '<td>'.$donnees['height_difference'].'</td>';
+    echo '<td><form action="update.php" method="post"><button name="data" value="'.implode('-',$donnees).'">Modifier</button></form></td>';
+    echo '<td><form action="read.php" method="post"><button name="data" value="'.$donnees['id'].'">Supprimer</button></form></td>';
     echo '</tr>';
 }
 
